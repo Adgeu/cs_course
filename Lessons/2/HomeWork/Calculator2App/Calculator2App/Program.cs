@@ -30,6 +30,11 @@ namespace Calculator2App
                     // Если введён C (лат.), обнуляем результат и очищаем поле ввода
                     UpdateScreen();
                 }
+                else if (inputExpression == "E")
+                {
+                    // Если введён E (лат.), выходим из цикла while
+                    break;
+                }
                 else
                 {
                     // Записываем в массив все числа из выражения
