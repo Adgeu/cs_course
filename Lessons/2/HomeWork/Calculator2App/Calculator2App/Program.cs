@@ -8,7 +8,7 @@ namespace Calculator2App
     {
         static void Main(string[] args)
         {
-            // Выводин стартовый экран
+            // Выводим стартовый экран
             UpdateScreen();
 
             // Объявляем переменную резултата
