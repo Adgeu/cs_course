@@ -6,34 +6,43 @@ namespace ClassWork_5
     {
         static void Main(string[] args)
         {
-            bool isRetry = true;
-            while (isRetry)
-            {
-                try
-                {
-                    Console.Write("Введите первое число: ");
-                    var first = int.Parse(Console.ReadLine());
-                    Console.Write("Введите второе число: ");
-                    var second = int.Parse(Console.ReadLine());
+            double first = ReadNumber("Введите первое число: ");
+            double second = ReadNumber("Введите второе число: ", true);
 
-                    Console.WriteLine("Сумма:        " + (first + second));
-                    Console.WriteLine("Разность:     " + (first - second));
-                    Console.WriteLine("Произведение: " + (first * second));
-                    Console.WriteLine("Частное:      " + (first / second));
-
-                    isRetry = false;
-                }
-                catch (FormatException)
-                {
-                    PrintError("Неправильный формат, попробуйте ещё раз!");                   
-                }    
-                catch (DivideByZeroException)
-                {
-                    PrintError("Деление на ноль, попробуйте ещё раз!");
-                }
-            }
+            Console.WriteLine("Сумма:        " + (first + second));
+            Console.WriteLine("Разность:     " + (first - second));
+            Console.WriteLine("Произведение: " + (first * second));
+            Console.WriteLine("Частное:      " + (first / second));
 
             Console.WriteLine("Конец!");
+        }
+
+        /// <summary>
+        /// Пользовательский ввод числа
+        /// </summary>
+        /// <param name="caption">Заголовок</param>
+        /// <param name="isSecond">Является ли число вторым?</param>
+        /// <returns>Введённое число</returns>
+        static double ReadNumber(string caption, bool isSecond = false)
+        {
+            while (true)
+            {
+                double number;
+
+                Console.Write(caption);
+                bool result = double.TryParse(Console.ReadLine(), out number);
+
+                if (result)
+                {
+                    if (isSecond && number == 0)
+                        PrintError("Деление на ноль!");
+                    else
+                        return number;
+                }
+                else
+                    PrintError("Неправильный формат!");
+                
+            }
         }
 
         static void PrintError(string message)
