@@ -15,7 +15,7 @@ namespace MegaBank
             {
                 currentAmount += currentAmount * percent;
             }
-
+             
             Console.WriteLine($"\nНеобходимое количество дней для накопления желаемой суммы: {requiredDays}.\nНажмите любую клавишу для выхода…");
         }
 
