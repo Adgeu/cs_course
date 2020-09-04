@@ -17,7 +17,7 @@ namespace EvenNumbers
                                  
                 dividend /= 10;            
             }
-
+             
             Console.WriteLine($"В числе {number} содержится следующее количество четных цифр: {evenCount}.\nНажмите любую клавишу для выхода... ");
         }
 
