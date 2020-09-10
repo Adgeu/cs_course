@@ -11,6 +11,8 @@ namespace StringBuilderPractice
 
             var sb = new StringBuilder(text);
 
+            var wordToUpperCase = 2;
+            var isWord = false;
             for (int i = 0; i < sb.Length; i++)
             {
                 if (char.IsWhiteSpace(sb[i]))
@@ -19,7 +21,20 @@ namespace StringBuilderPractice
                     {
                         sb.Remove(i, 1);
                         i--;
+                    }
+
+                    isWord = false;
+                }
+                else
+                {
+                    if (!isWord)
+                    {
+                        wordToUpperCase--;
+                        isWord = true;
                     }                        
+
+                    if (isWord && wordToUpperCase == 0)
+                        sb[i] = char.ToUpper(sb[i]);
                 }
             }
 
