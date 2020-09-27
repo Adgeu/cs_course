@@ -20,9 +20,11 @@ namespace Reminder
             AlarmMessage = alarmMessage;
         }
 
-        public virtual string WriteProperties() =>
-            $"{this.GetType().Name}\nAlarmDate: {AlarmDate}\nAlarmMessage: {AlarmMessage}\nTimeToAlarm: {TimeToAlarm}\nIsOutdated: {IsOutdated}";
+        public virtual void WriteProperties() =>
+            Console.WriteLine(this);
 
+        public override string ToString() =>
+            $"{GetType().Name}\nAlarmDate: {AlarmDate}\nAlarmMessage: {AlarmMessage}\nTimeToAlarm: {TimeToAlarm}\nIsOutdated: {IsOutdated}";
     }
     
     class PhoneReminderItem : ReminderItem
@@ -35,9 +37,11 @@ namespace Reminder
             PhoneNumber = phoneNumber;
         }
 
-        public override string WriteProperties() =>
-            base.WriteProperties() + $"\nPhoneNumber: {PhoneNumber}";
+        public override void WriteProperties() =>
+            Console.WriteLine(this);
 
+        public override string ToString() =>
+            base.ToString() + $"\nPhoneNumber: {PhoneNumber}";
     }
 
     class ChatReminderItem : ReminderItem
@@ -53,7 +57,10 @@ namespace Reminder
             AccountName = accountName;
         }
 
-        public override string WriteProperties() =>
-            base.WriteProperties() + $"\nChatName: {ChatName}\nAccountName: {AccountName}";
+        public override void WriteProperties() =>
+            Console.WriteLine(this);
+
+        public override string ToString() =>
+            base.ToString() + $"\nChatName: {ChatName}\nAccountName: {AccountName}";
     }
 }
