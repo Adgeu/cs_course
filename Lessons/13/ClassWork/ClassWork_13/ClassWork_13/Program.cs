@@ -36,7 +36,9 @@ namespace ClassWork_13
                 throw new InvalidOperationException();
         }
 
-        public virtual void WriteAllProperties()=>
+        public abstract void WriteAllProperties();
+
+        public virtual void WriteAllProperties_2() =>
             Console.WriteLine($"CurrentHeight: {CurrentHeight}\nMaxHeight: {MaxHeight}");
     }
 
@@ -51,10 +53,13 @@ namespace ClassWork_13
             Console.WriteLine("It`s a helicopter, welcome aboard!");
         }
 
-        public override void WriteAllProperties()
+        public override void WriteAllProperties() =>
+            Console.WriteLine($"Properties for Helicopter:\nBladesCount: {BladesCount}\nCurrentHeight: {CurrentHeight}\nMaxHeight: {MaxHeight}");
+
+        public override void WriteAllProperties_2()
         {
             Console.WriteLine($"Properties for Helicopter:\nBladesCount: {BladesCount}");
-            base.WriteAllProperties();
+            base.WriteAllProperties_2();
         }
     }
 
@@ -69,10 +74,13 @@ namespace ClassWork_13
             Console.WriteLine("It`s a plane, welcome aboard!");
         }
 
-        public override void WriteAllProperties()
+        public override void WriteAllProperties() =>
+            Console.WriteLine($"Properties for Plane:\nEnginesCount: {EnginesCount}\nCurrentHeight: {CurrentHeight}\nMaxHeight: {MaxHeight}");
+
+        public override void WriteAllProperties_2()
         {
             Console.WriteLine($"Properties for Plane:\nBladesCount: {EnginesCount}");
-            base.WriteAllProperties();
+            base.WriteAllProperties_2();
         }
     }
 
