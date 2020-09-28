@@ -2,11 +2,34 @@
 
 namespace ClassWork_13
 {
-    abstract class AirTransport
+    interface IFlyingObject
     {
-        public int MaxHeight { get; private set; }
+        int MaxHeight { get;  set; }
+        int CurrentHeight { get;  set; }
+        void TakeUpper(int delta);
+        void TakeLower(int delta);
+    }
 
-        public int CurrentHeight { get; private set; }
+    interface IHelicopter
+    {
+        byte BladesCount { get; set; }
+    }
+
+    interface IPlane
+    {
+        byte EnginesCount { get; set; }
+    }
+
+    interface IPropertiesWriter
+    {
+        void WriteAllProperties();
+    }
+
+    abstract class AirTransport : IFlyingObject, IPropertiesWriter
+    {
+        public int MaxHeight { get; set; }
+
+        public int CurrentHeight { get; set; }
 
         public AirTransport(int maxHeight, int currentHeight)
         {
@@ -42,9 +65,9 @@ namespace ClassWork_13
             Console.WriteLine($"CurrentHeight: {CurrentHeight}\nMaxHeight: {MaxHeight}");
     }
 
-    class Helicopter : AirTransport
+    class Helicopter : AirTransport, IHelicopter
     {
-        public byte BladesCount { get; private set; }
+        public byte BladesCount { get; set; }
 
         public Helicopter(int maxHeight, byte bladesCount) :
             base(maxHeight, 0)
@@ -63,9 +86,9 @@ namespace ClassWork_13
         }
     }
 
-    class Plane : AirTransport
+    class Plane : AirTransport, IPlane
     {
-        public byte EnginesCount { get; private set; }
+        public byte EnginesCount { get; set; }
 
         public Plane(int maxHeight, byte enginesCount) :
             base(maxHeight, 0)
