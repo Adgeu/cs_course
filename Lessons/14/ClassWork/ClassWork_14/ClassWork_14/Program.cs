@@ -6,7 +6,7 @@ namespace ClassWork_14
     class ErrorList : IDisposable
     {
         public string Category { get; }
-        public List<string> Errors { get; private set; }
+        public List<string> Errors { get; set; }
 
         public ErrorList(string category)
         {
