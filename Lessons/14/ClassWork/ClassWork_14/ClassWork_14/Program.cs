@@ -3,27 +3,39 @@ using System.Collections.Generic;
 
 namespace ClassWork_14
 {
-    class ErrorList : IDisposable
+    class ErrorList : IDisposable, IEnumerable<string>
     {
         public string Category { get; }
-        public List<string> Errors { get; set; }
+
+        private List<string> _errors;
 
         public ErrorList(string category)
         {
             Category = category;
-            Errors = new List<string>();
+            _errors = new List<string>();
         }
 
-        public void WriteAllErrors()
+        public void Add(string errorMessage) =>
+            _errors.Add(errorMessage);
+
+
+        public IEnumerator<string> GetEnumerator()
         {
-            foreach (var error in Errors)
-                Console.WriteLine($"{Category}: {error}");
+            return _errors.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return  _errors.GetEnumerator();
         }
 
         public void Dispose()
         {
-            Errors.Clear();
-            Errors = null;
+            if (_errors != null)
+            {
+                _errors.Clear();
+                _errors = null;
+            }        
         }
     }
 
@@ -33,11 +45,12 @@ namespace ClassWork_14
         {
             using var errorList = new ErrorList("System");
 
-            errorList.Errors.Add("1st error");
-            errorList.Errors.Add("2nd error");
-            errorList.Errors.Add("3rd error");
+            errorList.Add("1st error");
+            errorList.Add("2nd error");
+            errorList.Add("3rd error");
 
-            errorList.WriteAllErrors();
+            foreach (var error in errorList)
+                Console.WriteLine($"{errorList.Category}: {error}");
         }
     }
 }
