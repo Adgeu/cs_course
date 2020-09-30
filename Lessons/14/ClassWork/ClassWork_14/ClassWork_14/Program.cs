@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace ClassWork_14
@@ -13,9 +13,6 @@ namespace ClassWork_14
             Category = category;
             Errors = new List<string>();
         }
-
-        public void AddError(string error) =>
-            Errors.Add(error);
 
         public void WriteAllErrors()
         {
@@ -36,9 +33,9 @@ namespace ClassWork_14
         {
             using var errorList = new ErrorList("System");
 
-            errorList.AddError("1st error");
-            errorList.AddError("2nd error");
-            errorList.AddError("3rd error");
+            errorList.Errors.Add("1st error");
+            errorList.Errors.Add("2nd error");
+            errorList.Errors.Add("3rd error");
 
             errorList.WriteAllErrors();
         }
