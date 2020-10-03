@@ -18,7 +18,7 @@ namespace LogWriter
         public abstract void LogError(string message);
 
         protected string FormatMessage(string message, string messageType) =>
-            $"{DateTimeOffset.UtcNow}    {messageType}    {message}\n";
+            $"{DateTimeOffset.UtcNow}\t{messageType}\t{message}\n";
     }
 
     class FileLogWriter : AbstractLogWriter
@@ -28,13 +28,13 @@ namespace LogWriter
             FileName = fileName;
 
         public override void LogInfo(string message) =>
-            File.AppendAllText(FileName, FormatMessage(message, "Info   "));
+            File.AppendAllText(FileName, FormatMessage(message, "Info"));
 
         public override void LogWarning(string message) =>
             File.AppendAllText(FileName, FormatMessage(message, "Warning"));
 
         public override void LogError(string message) =>
-            File.AppendAllText(FileName, FormatMessage(message, "Error  "));
+            File.AppendAllText(FileName, FormatMessage(message, "Error"));
 
         public void ClearLogs() =>
             File.WriteAllText(FileName, "");
@@ -43,13 +43,13 @@ namespace LogWriter
     class ConsoleLogWriter : AbstractLogWriter
     {
         public override void LogInfo(string message) =>
-            ConsoleWriteColorized(FormatMessage(message, "Info   "), ConsoleColor.Cyan);
+            ConsoleWriteColorized(FormatMessage(message, "Info"), ConsoleColor.Cyan);
 
         public override void LogWarning(string message) =>
             ConsoleWriteColorized(FormatMessage(message, "Warning"), ConsoleColor.Yellow);
 
         public override void LogError(string message) =>
-            ConsoleWriteColorized(FormatMessage(message, "Error  "), ConsoleColor.Red);
+            ConsoleWriteColorized(FormatMessage(message, "Error"), ConsoleColor.Red);
 
         private void ConsoleWriteColorized(string text, ConsoleColor color)
         {
