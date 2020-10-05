@@ -2,33 +2,33 @@
 
 namespace ClassWork_15
 {
+    public delegate double CircleDelegate(double a);
+
     class Program
     {
         static void Main(string[] args)
-        {
-            var a1 = new Account<int>(123, "Alex");
-            a1.WriteProperties();
-
-            var a2 = new Account<string>("456", "Mark");
-            a2.WriteProperties();
-
-            var a3 = new Account<Guid>(Guid.NewGuid(), "Todd");
-            a3.WriteProperties();
+        {  
+            var circle = new Circle(10.0);          
+            
+            Console.WriteLine(circle.Calculate(Length));
+            Console.WriteLine(circle.Calculate(Area));
         }
+
+        static double Length(double radius) =>
+            2 * Math.PI * radius;
+
+        static double Area(double radius) =>
+            Math.PI * Math.Pow(radius, 2);
     }
 
-    class Account<T>
+    public sealed class Circle
     {
-        public T Id { get; private set; }
-        public string Name { get; private set; }
+        private double _radius;
 
-        public Account(T id, string name)
-        {
-            Id = id;
-            Name = name;
-        }
+        public Circle(double radius) =>
+            _radius = radius;
 
-        public void WriteProperties() =>
-            Console.WriteLine($"Id: {Id}\nName: {Name}");
+        public double Calculate(CircleDelegate operation) =>
+            operation(_radius);
     }
 }
