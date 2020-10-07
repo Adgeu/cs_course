@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>public_sealed_class_Circle</RootNamespace>
   </PropertyGroup>
 
 </Project>
