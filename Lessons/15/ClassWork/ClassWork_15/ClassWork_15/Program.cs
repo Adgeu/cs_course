@@ -2,8 +2,6 @@
 
 namespace ClassWork_15
 {
-    public delegate double CircleDelegate(double a);
-
     class Program
     {
         static void Main(string[] args)
@@ -28,7 +26,7 @@ namespace ClassWork_15
         public Circle(double radius) =>
             _radius = radius;
 
-        public double Calculate(CircleDelegate operation) =>
+        public double Calculate(Func<double, double> operation) =>
             operation(_radius);
     }
 }
