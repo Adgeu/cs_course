@@ -1,4 +1,6 @@
 ﻿using System;
+using Calculator.Figure;
+using Calculator.Operation;
 
 namespace ClassWork_16
 {
@@ -8,20 +10,15 @@ namespace ClassWork_16
         {
             var circle = new Circle(10.0);
 
-            Console.WriteLine(circle.Calculate(radius => 2 * Math.PI * radius));
-            Console.WriteLine(circle.Calculate(radius => Math.PI * Math.Pow(radius, 2)));
-            Console.WriteLine(circle.Calculate(radius => 2 * radius));
+            Console.WriteLine(circle.Calculate(CircleOperation.Length));
+            Console.WriteLine(circle.Calculate(CircleOperation.Area));
+
+            var square = new Square(6.0);
+
+            Console.WriteLine(square.Calculate(SquareOperation.Perimeter));
+            Console.WriteLine(square.Calculate(SquareOperation.Area));
         }
     }
 
-    public sealed class Circle
-    {
-        private double _radius;
-
-        public Circle(double radius) =>
-            _radius = radius;
-
-        public double Calculate(Func<double, double> operation) =>
-            operation(_radius);
-    }
+    
 }

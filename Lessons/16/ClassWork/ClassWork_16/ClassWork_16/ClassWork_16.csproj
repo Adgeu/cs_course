@@ -5,4 +5,9 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Calculator.Operation\Calculator.Operation.csproj" />
+    <ProjectReference Include="..\public sealed class Circle\Calculator.Figure.csproj" />
+  </ItemGroup>
+
 </Project>
