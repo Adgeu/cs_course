@@ -23,7 +23,19 @@ namespace LogWriter
         public ILogWriter GetLogWriter<T>(object parameters)
             where T : ILogWriter
         {
-            T logWriter = new FileLogWriter();
+            if (typeof(T) == typeof(FileLogWriter))
+                return string.IsNullOrWhiteSpace((string)parameters) ?
+                       new FileLogWriter() :
+                       new FileLogWriter((string)parameters);
+
+            else if (typeof(T) == typeof(ConsoleLogWriter))
+                return new ConsoleLogWriter();
+
+            else if (typeof(T) == typeof(MultipleLogWriter))
+                return new MultipleLogWriter(parameters as List<AbstractLogWriter>);
+
+            else
+                return null;
         }
     }
 
@@ -34,13 +46,19 @@ namespace LogWriter
         public abstract void LogError(string message);
 
         protected string FormatMessage(string message, string messageType) =>
-            $"{DateTimeOffset.UtcNow}\t{messageType}\t{message}\n";
+            $"{DateTimeOffset.Now}\t{messageType}\t{message}\n";
     }
 
     class FileLogWriter : AbstractLogWriter
     {
-        public string FileName { get; }
-        public FileLogWriter(string fileName = "log.txt") =>
+        public string FileName { get; set; }
+
+        public static string DefaultFileName { get; } = "log.txt";
+
+        public FileLogWriter() =>
+            FileName = DefaultFileName;
+
+        public FileLogWriter(string fileName) =>
             FileName = fileName;
 
         public override void LogInfo(string message) =>
@@ -106,7 +124,19 @@ namespace LogWriter
         static void Main(string[] args)
         {
             var logWriter = LogWriterFactory.Instanse;
-            var fileLogWriter = logWriter.GetLogWriter<FileLogWriter>()
+
+            var fileLogWriter = logWriter.GetLogWriter<FileLogWriter>("log_file.txt");
+
+            var consoleLogWriter = logWriter.GetLogWriter<ConsoleLogWriter>(null);
+
+            var multipleLogWriter = logWriter.GetLogWriter<MultipleLogWriter>(
+                new List<AbstractLogWriter> 
+                {
+                    (AbstractLogWriter)fileLogWriter,
+                    (AbstractLogWriter)consoleLogWriter
+                });
+
+            multipleLogWriter.LogInfo("Some info");
         }
     }
 }
