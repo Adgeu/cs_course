@@ -24,18 +24,16 @@ namespace LogWriter
             where T : ILogWriter
         {
             if (typeof(T) == typeof(FileLogWriter))
-                return string.IsNullOrWhiteSpace((string)parameters) ?
-                       new FileLogWriter() :
-                       new FileLogWriter((string)parameters);
+                return new FileLogWriter((string)parameters);
 
             else if (typeof(T) == typeof(ConsoleLogWriter))
                 return new ConsoleLogWriter();
 
             else if (typeof(T) == typeof(MultipleLogWriter))
-                return new MultipleLogWriter(parameters as List<AbstractLogWriter>);
+                return new MultipleLogWriter(parameters as List<ILogWriter>);
 
             else
-                return null;
+                throw new ArgumentOutOfRangeException("<T> Must be FileLogWriter, ConsoleLogWriter or MultipleLogWriter!");
         }
     }
 
@@ -55,11 +53,8 @@ namespace LogWriter
 
         public static string DefaultFileName { get; } = "log.txt";
 
-        public FileLogWriter() =>
-            FileName = DefaultFileName;
-
         public FileLogWriter(string fileName) =>
-            FileName = fileName;
+            FileName = fileName ?? DefaultFileName;
 
         public override void LogInfo(string message) =>
             File.AppendAllText(FileName, FormatMessage(message, "Info"));
@@ -93,30 +88,21 @@ namespace LogWriter
         }
     }
 
-    class MultipleLogWriter : AbstractLogWriter
+    class MultipleLogWriter : ILogWriter
     {
-        private List<AbstractLogWriter> _logsList;
+        private List<ILogWriter> _logsList;
 
-        public MultipleLogWriter(List<AbstractLogWriter> logsList) =>
+        public MultipleLogWriter(List<ILogWriter> logsList) =>
             _logsList = logsList;
 
-        public override void LogInfo(string message)
-        {
-            foreach (var log in _logsList)
-                log.LogInfo(message);
-        }
+        public void LogInfo(string message) =>
+            _logsList.ForEach(x => x.LogInfo(message));
 
-        public override void LogWarning(string message)
-        {
-            foreach (var log in _logsList)
-                log.LogWarning(message);
-        }
+        public void LogWarning(string message) =>
+            _logsList.ForEach(x => x.LogWarning(message));
 
-        public override void LogError(string message)
-        {
-            foreach (var log in _logsList)
-                log.LogError(message);
-        }
+        public void LogError(string message) =>
+            _logsList.ForEach(x => x.LogError(message));
     }
 
     class Program
@@ -130,10 +116,10 @@ namespace LogWriter
             var consoleLogWriter = logWriter.GetLogWriter<ConsoleLogWriter>(null);
 
             var multipleLogWriter = logWriter.GetLogWriter<MultipleLogWriter>(
-                new List<AbstractLogWriter> 
+                new List<ILogWriter>
                 {
-                    (AbstractLogWriter)fileLogWriter,
-                    (AbstractLogWriter)consoleLogWriter
+                    fileLogWriter,
+                    consoleLogWriter
                 });
 
             multipleLogWriter.LogInfo("Some info");
