@@ -46,7 +46,7 @@ namespace FileWriter
                 var indexToFire = GetNextIndexForFillCollection();
                 for (int i = 0; i < dataLength; i++)
                 {
-                    if (i == indexToFire)
+                    if (i == indexToFire && _indexes.Count < (int)(dataLength / _indexRate))
                     {
                         _indexes.Enqueue(i);
                         // Следующий форматированный индекс
