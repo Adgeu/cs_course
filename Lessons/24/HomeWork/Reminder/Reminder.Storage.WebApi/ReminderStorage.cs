@@ -8,8 +8,10 @@ namespace Reminder.Storage.WebApi
 {
 	using Exceptions;
 	using Dto;
+    using System.Collections.Generic;
+    using System.Linq;
 
-	public class ReminderStorage : IReminderStorage
+    public class ReminderStorage : IReminderStorage
 	{
 		private const string ApiPrefix = "/api/reminders";
 
@@ -52,7 +54,18 @@ namespace Reminder.Storage.WebApi
 
 		public void Update(ReminderItem item)
 		{
-			throw new NotImplementedException();
+			var json = JsonSerializer.Serialize(item, SerializerOptions);
+			var content = new StringContent(json, Encoding.Unicode, "application/json");
+			var message = _client.PutAsync($"{ApiPrefix}/{item.Id:N}", content)
+				.GetAwaiter()
+				.GetResult();
+
+			if (message.StatusCode == HttpStatusCode.NotFound)
+			{
+				throw new ReminderItemNotFoundException(item.Id);
+			}
+
+			message.EnsureSuccessStatusCode();
 		}
 
 		public ReminderItem Get(Guid id)
@@ -73,18 +86,37 @@ namespace Reminder.Storage.WebApi
 				.GetResult();
 			var dto = JsonSerializer.Deserialize<ReminderItemDto>(json, SerializerOptions);
 
-			return new ReminderItem(
-				dto.Id,
-				dto.Status,
-				dto.DateTime,
-				dto.Message,
-				dto.ContactId
-			);
+			return dto.ReminderItem;
 		}
 
 		public ReminderItem[] Find(ReminderItemFilter filter)
 		{
-			throw new NotImplementedException();
+			var url = ApiPrefix;
+
+			if (filter.HasFilter)
+            {
+				url += "?";
+
+				if (filter.DateTime.HasValue)
+					url += $"datetime={filter.DateTime.Value.ToUnixTimeMilliseconds()}&";
+
+				if (filter.Status.HasValue)
+					url += $"status={filter.Status.Value}&";
+
+				url.Remove(url.Length - 1, 1);
+			}		
+
+			var message =  _client.GetAsync(url)
+				.GetAwaiter()
+				.GetResult();
+
+			var json = message.Content.ReadAsStringAsync()
+				.GetAwaiter()
+				.GetResult();
+
+			var dtos = JsonSerializer.Deserialize<List<ReminderItemDto>>(json, SerializerOptions);
+
+			return dtos.Select(dto => dto.ReminderItem).ToArray();
 		}
 	}
 }

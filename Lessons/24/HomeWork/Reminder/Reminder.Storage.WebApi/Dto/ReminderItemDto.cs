@@ -9,5 +9,8 @@ namespace Reminder.Storage.WebApi.Dto
 		public ReminderItemStatus Status { get; set; }
 		public string Message { get; set; }
 		public string ContactId { get; set; }
-	}
+
+		public ReminderItem ReminderItem =>
+			new ReminderItem(Id, Status, DateTime, Message, ContactId);
+    }
 }

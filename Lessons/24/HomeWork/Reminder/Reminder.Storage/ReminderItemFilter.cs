@@ -4,11 +4,14 @@ namespace Reminder.Storage
 {
 	public class ReminderItemFilter
 	{
-		public DateTimeOffset DateTime { get; }
+		public DateTimeOffset? DateTime { get; }
 
-		public ReminderItemStatus Status { get; }
+		public ReminderItemStatus? Status { get; }
 
-		private ReminderItemFilter(DateTimeOffset dateTime, ReminderItemStatus status)
+		public bool HasFilter =>
+			DateTime.HasValue || Status.HasValue;
+
+		private ReminderItemFilter(DateTimeOffset? dateTime, ReminderItemStatus? status)
 		{
 			DateTime = dateTime;
 			Status = status;
